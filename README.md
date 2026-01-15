@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MonkeyRead 🐒🚀
 
-## Getting Started
+**MonkeyRead** is a premium, high-performance RSVP (Rapid Serial Visual Presentation) speed reader inspired by the minimalist aesthetic of Monkeytype. It helps you consume text up to 5x faster by flashing words one at a time and highlighting the **Optimal Recognition Point (ORP)**.
 
-First, run the development server:
+![MonkeyRead Preview](https://github.com/RishabhK103/monkeyread/raw/main/public/preview.png) *(Placeholder: Update with actual screenshot)*
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Key Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **🚀 Blitz Reading**: Adjustable speed up to 2000 WPM with an optimized RSVP engine.
+- **🧠 Bionic Reading**: Optional mode that bolds word anchors to improve comprehension.
+- **🎨 Premium Themes**: Multiple color palettes (Monkeytype, Serika Dark, Carbon, Matrix, Nord).
+- **🕹️ Tactile Gallery**: Interactive word slider with scroll-snapping for easy scrubbing/rewinding.
+- **🌑 Focus Mode**: A distraction-free "Zen" interface that auto-hides UI during playback.
+- **📄 File Parsing**: Drag & drop support for PDF, DOCX, and TXT files.
+- **⌨️ Keyboard First**: Full command palette (`Cmd/Ctrl + K`) and shortcut support.
+- **📊 Reading Stats**: Real-time progress and session word count tracking.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Framework**: Next.js 15 (App Router / Turbopack)
+- **Styling**: Tailwind CSS + CSS Variables
+- **Animations**: Framer Motion
+- **State Management**: Zustand (+ Persistence)
+- **UI Components**: shadcn/ui + Lucide Icons
+- **Parsing**: `pdfjs-dist` + `mammoth`
 
-## Learn More
+## 🚀 Getting Started
 
-To learn more about Next.js, take a look at the following resources:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/RishabhK103/monkeyread.git
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🤝 Connect with me
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **GitHub**: [@RishabhK103](https://github.com/RishabhK103)
+- **Twitter/X**: [@RishabhK103](https://x.com/RishabhK103)
+- **LinkedIn**: [Rishabh Kothari](https://www.linkedin.com/in/rishabh-kothari-527a5824b/)
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Made with 💛 for fast readers.
