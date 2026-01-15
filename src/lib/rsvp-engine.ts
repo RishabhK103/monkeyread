@@ -2,6 +2,10 @@ export interface WordInfo {
     word: string;
     pivotIndex: number;
     delayFactor: number;
+    bionicWord?: {
+        bold: string;
+        rest: string;
+    };
 }
 
 export const calculateORP = (word: string): number => {
@@ -26,10 +30,20 @@ export const processText = (text: string): string[] => {
         .filter((word) => word.length > 0);
 };
 
-export const getWordInfo = (word: string): WordInfo => {
+export const getBionicWord = (word: string) => {
+    const length = word.length;
+    const boldLength = Math.ceil(length * 0.5);
+    return {
+        bold: word.substring(0, boldLength),
+        rest: word.substring(boldLength),
+    };
+};
+
+export const getWordInfo = (word: string, bionicEnabled: boolean = false): WordInfo => {
     return {
         word,
         pivotIndex: calculateORP(word),
         delayFactor: getDelayFactor(word),
+        bionicWord: bionicEnabled ? getBionicWord(word) : undefined,
     };
 };
