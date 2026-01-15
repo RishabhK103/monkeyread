@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useRef, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@/store/useStore';
 import { getWordInfo } from '@/lib/rsvp-engine';
 
@@ -18,6 +18,8 @@ export const ReadingViewport: React.FC = () => {
     } = useStore();
     const timerRef = useRef<NodeJS.Timeout | null>(null);
     const galleryRef = useRef<HTMLDivElement>(null);
+    const isManualScroll = useRef(false);
+    const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // Memoize word info with bionic support
     const currentWordInfo = useMemo(() => {
@@ -26,7 +28,7 @@ export const ReadingViewport: React.FC = () => {
     }, [words, currentIndex, readingConfig.bionicEnabled]);
 
     // Windowing for the gallery
-    const WINDOW_SIZE = 15;
+    const WINDOW_SIZE = 25; // Slightly larger window for better scrubbing
     const galleryWindow = useMemo(() => {
         const start = Math.max(0, currentIndex - WINDOW_SIZE);
         const end = Math.min(words.length, currentIndex + WINDOW_SIZE + 1);
@@ -36,17 +38,51 @@ export const ReadingViewport: React.FC = () => {
         }));
     }, [words, currentIndex]);
 
+    // Handle auto-scrolling when word changes
     useEffect(() => {
-        if (galleryRef.current) {
+        if (galleryRef.current && !isManualScroll.current) {
             const activeElement = galleryRef.current.querySelector(`[data-index="${currentIndex}"]`) as HTMLElement;
             if (activeElement) {
                 galleryRef.current.scrollTo({
                     left: activeElement.offsetLeft - galleryRef.current.offsetWidth / 2 + activeElement.offsetWidth / 2,
-                    behavior: 'auto'
+                    behavior: isPlaying ? 'auto' : 'smooth'
                 });
             }
         }
-    }, [currentIndex]);
+    }, [currentIndex, isPlaying]);
+
+    // Handle manual scroll scrubbing
+    const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+        if (isPlaying) return; // Disable scrubbing while playing to prevent conflicts
+
+        isManualScroll.current = true;
+
+        if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+        scrollTimeout.current = setTimeout(() => {
+            isManualScroll.current = false;
+        }, 150);
+
+        const container = e.currentTarget;
+        const containerCenter = container.scrollLeft + container.offsetWidth / 2;
+
+        // Find the element closest to the center
+        const wordElements = container.querySelectorAll('[data-index]');
+        let closestIndex = currentIndex;
+        let minDistance = Infinity;
+
+        wordElements.forEach((el: any) => {
+            const elCenter = el.offsetLeft + el.offsetWidth / 2;
+            const distance = Math.abs(elCenter - containerCenter);
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestIndex = parseInt(el.getAttribute('data-index') || '0');
+            }
+        });
+
+        if (closestIndex !== currentIndex) {
+            setCurrentIndex(closestIndex);
+        }
+    };
 
     useEffect(() => {
         if (isPlaying && currentIndex < words.length) {
@@ -74,13 +110,10 @@ export const ReadingViewport: React.FC = () => {
     }
 
     const { word, pivotIndex, bionicWord } = currentWordInfo || { word: '', pivotIndex: 0 };
-
-    // Split the word for ORP highlighting
     const beforePivot = word.substring(0, pivotIndex);
     const pivot = word[pivotIndex];
     const afterPivot = word.substring(pivotIndex + 1);
 
-    // Apply font configuration
     const viewportStyle = {
         fontFamily: fontConfig.family,
         fontSize: `${fontConfig.size}%`,
@@ -133,22 +166,28 @@ export const ReadingViewport: React.FC = () => {
                 </motion.div>
             </div>
 
-            {/* Word Gallery Slider */}
-            <div className="w-full flex flex-col items-center gap-4">
+            {/* Word Gallery Slider (Interactive Scrubbing) */}
+            <div className="w-full flex flex-col items-center gap-4 group/gallery">
                 <div
                     ref={galleryRef}
-                    className="w-full h-16 overflow-hidden flex items-center gap-6 px-[50%] no-scrollbar select-none"
+                    onScroll={handleScroll}
+                    className="w-full h-20 overflow-x-auto flex items-center gap-8 px-[50%] no-scrollbar select-none cursor-ew-resize scroll-smooth"
+                    style={{
+                        scrollSnapType: 'x mandatory',
+                        WebkitOverflowScrolling: 'touch'
+                    }}
                 >
                     {galleryWindow.map(({ word, originalIndex }) => (
                         <span
                             key={`${word}-${originalIndex}`}
                             data-index={originalIndex}
                             onClick={() => setCurrentIndex(originalIndex)}
+                            style={{ scrollSnapAlign: 'center' }}
                             className={cn(
-                                "cursor-pointer font-mono whitespace-nowrap text-lg transition-all duration-150 py-2",
+                                "cursor-pointer font-mono whitespace-nowrap text-lg transition-all duration-300 py-4 px-2",
                                 originalIndex === currentIndex
-                                    ? "text-monkey scale-125 opacity-100"
-                                    : "text-foreground opacity-20 hover:opacity-40"
+                                    ? "text-monkey scale-150 opacity-100 font-bold"
+                                    : "text-foreground opacity-20 hover:opacity-40 hover:scale-110"
                             )}
                         >
                             {word}
@@ -164,6 +203,10 @@ export const ReadingViewport: React.FC = () => {
                         animate={{ width: `${((currentIndex + 1) / words.length) * 100}%` }}
                         transition={{ duration: 0.1 }}
                     />
+                </div>
+
+                <div className="text-[10px] uppercase font-mono text-sub/30 tracking-widest opacity-0 group-hover/gallery:opacity-100 transition-opacity">
+                    Swipe or Drag to scrub through text
                 </div>
             </div>
         </div>

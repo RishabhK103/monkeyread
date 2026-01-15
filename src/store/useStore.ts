@@ -123,6 +123,12 @@ export const useStore = create<ReadingState>()(
                 readingConfig: state.readingConfig,
                 stats: { totalWordsRead: state.stats.totalWordsRead }
             }),
+            onRehydrateStorage: () => (state) => {
+                if (state) {
+                    // Ensure session count starts at 0 regardless of persistence
+                    state.stats.sessionWordCount = 0;
+                }
+            },
         }
     )
 );

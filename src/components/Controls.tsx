@@ -82,7 +82,7 @@ export const Controls: React.FC = () => {
                     <span className="text-[10px] uppercase tracking-widest text-sub font-mono">Session</span>
                     <div className="flex items-center gap-1.5 text-monkey">
                         <Zap size={12} className="fill-monkey/20" />
-                        <span className="text-xl font-mono font-bold">{stats.sessionWordCount}</span>
+                        <span className="text-xl font-mono font-bold">{(stats?.sessionWordCount || 0)}</span>
                         <span className="text-[10px] text-sub/50 font-mono">words</span>
                     </div>
                 </div>

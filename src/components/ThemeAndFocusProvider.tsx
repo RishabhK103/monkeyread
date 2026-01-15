@@ -66,8 +66,9 @@ export const ThemeAndFocusProvider = ({ children }: { children: React.ReactNode 
                         className="w-full max-w-5xl px-8 py-12 flex items-center justify-between text-sub font-mono text-[10px] uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity z-10"
                     >
                         <div className="flex items-center gap-4">
-                            <a href="https://github.com" target="_blank" className="hover:text-monkey transition-colors">github</a>
-                            <a href="https://twitter.com" target="_blank" className="hover:text-monkey transition-colors">twitter</a>
+                            <a href="https://github.com/RishabhK103/monkeyread" target="_blank" rel="noopener noreferrer" className="hover:text-monkey transition-colors">github</a>
+                            <a href="https://x.com/RishabhK103" target="_blank" rel="noopener noreferrer" className="hover:text-monkey transition-colors">twitter</a>
+                            <a href="https://www.linkedin.com/in/rishabh-kothari-527a5824b/" target="_blank" rel="noopener noreferrer" className="hover:text-monkey transition-colors">linkedin</a>
                         </div>
                         <div className="flex items-center gap-4">
                             <span>v1.2.0</span>

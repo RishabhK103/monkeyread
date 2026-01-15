@@ -46,14 +46,16 @@ export const CommandPalette = () => {
         <Command.Dialog
             open={open}
             onOpenChange={setOpen}
+            aria-labelledby="command-palette-title"
+            aria-describedby="command-palette-description"
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm"
         >
             <div className="w-full max-w-xl bg-background border border-sub/20 rounded-xl shadow-2xl overflow-hidden glass">
-                {/* Visually Hidden Title for Accessibility */}
-                <div className="sr-only">
-                    <h2>Command Palette</h2>
-                    <p>Search for commands and settings</p>
-                </div>
+                {/* Visually Hidden Title and Description for Accessibility */}
+                <h2 id="command-palette-title" className="sr-only">Command Palette</h2>
+                <p id="command-palette-description" className="sr-only">
+                    Search for themes, toggle reading modes, and manage your session commands.
+                </p>
 
                 <Command.Input
                     placeholder="Type a command or search..."
